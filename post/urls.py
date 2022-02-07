@@ -16,5 +16,5 @@ urlpatterns = [
     path('cat/<str:cat>/', views.CategoryFilter.as_view(), name="category_filter"),
 
     # Admin work
-    path('kcv/', views.AdminLogin.as_view(), name="ad"),
+    path('writer/kcv/', views.AdminLogin.as_view(), name="ad"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
