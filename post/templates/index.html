@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+    <div class="container mt-4">
+        {% if not request.GET.page %}
+        <div class="row">
+            <div class="col-lg-3 mb-4">
+                <div class="list-group">
+                    <a href="" class="list-group-item disabled active list-group-item-action">Category</a>
+                    {% for cat_list in categories_list %}
+                        <a href="{% url 'category_filter' cat_list.cat_slug %}" class="list-group-item list-group-item-action">{{ cat_list.cat_name }}</a>
+                    {% endfor %}
+                    <a href="{% url 'category' %}" class="list-group-item list-group-item-action list-group-item-warning">view more  <i class="fas fa-angle-double-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card mb-4">
+                            <div class="card-body pb-2">
+                                <h2 class="display-6"><a href="{% url 'blog' top_blog.blog.slug %}" class="text-muted text-decoration-none"><strong>{{ top_blog.blog.title|truncatechars:30 }}</strong></a></h2>
+                                <span class="badge rounded-pill bg-success mt-1 mb-2">{{ top_blog.blog.doc }}</span>
+                                <p class="small mb-2">
+                                    <strong>Tags: </strong>
+                                    {% for tag in top_blog.blog.tags.all %}
+                                    <a href="{% url 'tag' tag.slug %}" class="text-primary">{{ tag.name }}</a>
+                                    {% endfor %}
+                                </p>
+                                <p class="mb-2">{{ top_blog.blog.short_desc|truncatechars:270 }}</p>
+                                <a href="{% url 'blog' top_blog.blog.slug %}" class="btn mb-1 btn-sm btn-warning">Read more <i class="fas fa-angle-double-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="card bg-danger mb-4">
+                                    <div class="card-body p-2 text-white text-center">
+                                        <h2 class="display-3 m-0" style="color: #ad1f2d"><i class="fas fa-tennis-ball"></i></h2>
+                                        <h1 class="m-1">200+</h1>
+                                        <span class="small">Sports</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="card bg-warning mb-4">
+                                    <div class="card-body p-2 text-white text-center">
+                                        <h2 class="display-3 m-0" style="color: #e6ac00"><i class="fas fa-elephant"></i></h2>
+                                        <h1 class="m-1">50+</h1>
+                                        <span class="small">Animals</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="card bg-success mb-4">
+                                    <div class="card-body p-2 text-white text-center">
+                                        <h2 class="display-3 m-0" style="color: #146c43"><i class="fas fa-heart"></i></h2>
+                                        <h1 class="m-1">100+</h1>
+                                        <span class="small">Relationship</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="card bg-primary mb-4">
+                                    <div class="card-body p-2 text-white text-center">
+                                        <h2 class="display-3 m-0" style="color: #025ce3"><i class="fas fa-turkey"></i></h2>
+                                        <h1 class="m-1">250+</h1>
+                                        <span class="small">Foods</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-lg-9">
+                {% for blog in blogs %}
+                <div class="card mb-4">
+                    <div class="card-body pb-2">
+                        <h2 class="display-6"><a href="{% url 'blog' blog.slug %}" class="text-muted text-decoration-none"><strong>{{ blog.title|truncatechars:50 }}</strong></a></h2>
+                        <span class="badge rounded-pill bg-success mt-1 mb-2">{{ blog.doc }}</span>
+                        <p class="small mb-2">
+                            <strong>Tags: </strong>
+                            {% for tag in blog.tags.all %}
+                            <a href="{% url 'tag' tag.slug %}" class="text-primary">{{ tag.name }}</a>
+                            {% endfor %}
+                        </p>
+                        <p class="mb-2">{{ blog.short_desc|truncatechars:300 }}</p>
+                        <a href="{% url 'blog' blog.slug %}" class="btn btn-sm btn-warning">Read more <i class="fas fa-angle-double-right"></i></a>
+                    </div>
+                </div>
+                {% endfor %}
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            {% if blogs.has_previous %}
+                            <a href="?page={{blogs.previous_page_number}}" class="page-link">Previous</a>
+                            {% else %}
+                            <button type="button" class="page-link text-muted disabled" disabled>Previous</button>
+                            {% endif %}
+                        </li>
+                        <li class="page-item">
+                            {% if blogs.has_next %}
+                            <a class="page-link" href="?page={{blogs.next_page_number}}">Next</a>
+                            {% else %}
+                            <button type="button" class="page-link text-muted disabled" disabled>Next</button>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-lg-12 mb-5">
+                        <form action="{% url 'subscribe' %}" method="post">
+                            <input type="email" placeholder="Email address" class="form-control" name="email">
+                            <button type="button" class="btn mt-2 btn-primary">Subscribe</button>
+                        </form>
+                    </div>
+                    <div class="col-lg-12 mb-5">
+                        <h4 class="text-muted lead">Popular Tags</h4>
+                        {% for tag in tags  %}
+                        <a href="{% url 'tag' tag.slug %}" style="text-decoration:none">
+                            <span class="badge bg-warning">{{ tag.name }}</span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-12 mb-5">
+                        <h4 class="text-muted lead">Follow us</h4>
+                        <a href="" class="btn text-white btn-sm" style="background-color: #3b5998;">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="" class="btn text-white btn-sm" style="background: radial-gradient(circle farthest-corner at 35% 90%, #fec564, transparent 50%), radial-gradient(circle farthest-corner at 0 140%, #fec564, transparent 50%), radial-gradient(ellipse farthest-corner at 0 -25%, #5258cf, transparent 50%), radial-gradient(ellipse farthest-corner at 20% -50%, #5258cf, transparent 50%), radial-gradient(ellipse farthest-corner at 100% 0, #893dc2, transparent 50%), radial-gradient(ellipse farthest-corner at 60% -20%, #893dc2, transparent 50%), radial-gradient(ellipse farthest-corner at 100% 100%, #d9317a, transparent), linear-gradient(#6559ca, #bc318f 30%, #e33f5f 50%, #f77638 70%, #fec66d 100%);">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="" class="btn text-white btn-sm" style="background-color: 	#1DA1F2;">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="" class="btn text-white btn-sm" style="background-color: #0e76a8;">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock content %}
